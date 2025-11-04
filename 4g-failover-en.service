@@ -1,14 +1,16 @@
+
 ### To be added in /etc/systemd/system/4g-failover-en.service
+## systemctl daemon-reload
 ## systemctl enable 4g-failover
 # systemctl start 4g-failover
 
 [Unit]
-Description=Surveillance connectivité et bascule automatique vers 4G
+Description=Main gateway monitoring and switch to cellular connexion
 Documentation=man:4g-failover(8) file:///usr/share/doc/4g-failover/README.md
 After=network-online.target
 Wants=network-online.target
-After=sys-subsystem-net-devices-enx001e101f0000.device
-Wants=sys-subsystem-net-devices-enx001e101f0000.device
+After=sys-subsystem-net-devices-enx001e101f0000.device  # change according to your 4G interface
+Wants=sys-subsystem-net-devices-enx001e101f0000.device    # change according to your 4G interface
 
 [Service]
 Type=simple
