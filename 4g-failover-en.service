@@ -1,3 +1,7 @@
+### To be added in /etc/systemd/system/4g-failover-en.service
+## systemctl enable 4g-failover
+# systemctl start 4g-failover
+
 [Unit]
 Description=Surveillance connectivité et bascule automatique vers 4G
 Documentation=man:4g-failover(8) file:///usr/share/doc/4g-failover/README.md
