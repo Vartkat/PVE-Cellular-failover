@@ -67,7 +67,7 @@ This script ensures **high availability** of a Proxmox VE server by automaticall
 ---
 
 ## 🏗️ Network Architecture
-
+Change all values according to your setup
 ### Networks
 
 | Network | Description | Gateway |
