@@ -1,0 +1,45 @@
+[Unit]
+Description=Surveillance connectivité et bascule automatique vers 4G
+Documentation=man:4g-failover(8) file:///usr/share/doc/4g-failover/README.md
+After=network-online.target
+Wants=network-online.target
+After=sys-subsystem-net-devices-enx001e101f0000.device
+Wants=sys-subsystem-net-devices-enx001e101f0000.device
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/4g-failover.sh
+TimeoutStartSec=120
+
+# Restart if fails
+Restart=always
+RestartSec=10
+#StartLimitIntervalSec=300
+#StartLimitBurst=5
+
+# Enc vars
+Environment="CONFIG_FILE=/etc/4g-failover.conf"
+
+# Journalisation
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=4g-failover
+
+# Basic security
+#ProtectHome=true
+#PrivateTmp=true
+
+# R/W paths
+#ReadWritePaths=/var/run /var/log /etc/resolv.conf
+
+# Network capaccities
+#AmbientCapabilities=CAP_NET_ADMIN CAP_NET_RAW CAP_NET_BIND_SERVICE CAP_SYS_ADMIN CAP_SETUID CAP_SETGID
+#CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_RAW CAP_NET_BIND_SERVICE CAP_SYS_ADMIN CAP_SETUID CAP_SETGID
+
+# Timeout for clean stop
+TimeoutStopSec=30
+KillMode=mixed
+KillSignal=SIGTERM
+
+[Install]
+WantedBy=multi-user.target
