@@ -38,16 +38,16 @@ This script ensures **high availability** of a Proxmox VE server by automaticall
 ┌─────────────────────────────────────────────────────────────┐
 │                    Normal Conditions                        │
 │                                                             │
-│  [VM/LXC] ──→ [Host PVE] ──→ [Internet Box] ──→ Internet     │
-│                     ↓                                        │
+│  [VM/LXC] ──→ [Host PVE] ──→ [Internet Box] ──→ Internet    │
+│                     ↓                                       │
 │                 [4G Key]  (standby, blocked)                │
 └─────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────┐
 │                    Internet Box DOWN                        │
 │                                                             │
-│  [VM/LXC] ──→ [Host PVE] ──→ [4G Key] ──→ Internet           │
-│                     ↑                                        │
+│  [VM/LXC] ──→ [Host PVE] ──→ [4G Key] ──→ Internet          │
+│                     ↑                                       │
 │                 Automatic failover                          │
 │                 + Telegram notification                     │
 │                 + PBS backups disabled                      │
@@ -104,16 +104,16 @@ This script ensures **high availability** of a Proxmox VE server by automaticall
                     │ vmbr0                   │ enx001e101f0000
                     │                         │
             ┌───────▼─────────────────────────▼───────┐
-            │        Proxmox VE Host                      │
-            │     192.168.2.28 (local)                    │
-            │     192.168.8.100 (4G)                      │
-            │     192.168.12.28 (ZeroTier)                │
-            │                                             │
-            │  [4G-Failover Script]                        │
-            │   - Box monitoring                           │
-            │   - Routing failover                         │
-            │   - NAT / Port forwarding                     │
-            └─────────┬───────────────────────────────────┘
+            │        Proxmox VE Host                  │
+            │     192.168.2.28 (local)                │
+            │     192.168.8.100 (4G)                  │
+            │     192.168.12.28 (ZeroTier)            │
+            │                                         │
+            │  [4G-Failover Script]                   │
+            │   - Box monitoring                      │
+            │   - Routing failover                    │
+            │   - NAT / Port forwarding               │
+            └─────────┬───────────────────────────────┘
                       │
         ┌─────────────┼─────────────┬──────────────┐
         │             │             │              │
@@ -127,8 +127,8 @@ This script ensures **high availability** of a Proxmox VE server by automaticall
     │            ZeroTier Network                      │
     │         (Secure remote access)                   │
     │                                                  │
-    │  [Client] ──→ 192.168.12.28:8123 ──→ HASS         │
-    │  [Client] ──→ 192.168.12.28:81   ──→ NGINX        │
+    │  [Client] ──→ 192.168.12.28:8123 ──→ HASS        │
+    │  [Client] ──→ 192.168.12.28:81   ──→ NGINX       │
     └──────────────────────────────────────────────────┘
 ```
 
@@ -341,8 +341,8 @@ declare -A PORT_FORWARDS=(
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│                   STARTUP                                 │
-│ 1. Check dependencies                                     │
+│                   STARTUP                                │
+│ 1. Check dependencies                                    │
 │ 2. Configure 4G interface (UP + static IP)               │
 │ 3. Block 4G traffic (except modem IP)                    │
 │ 4. Restore state if restarting while in 4G mode          │
@@ -352,37 +352,37 @@ declare -A PORT_FORWARDS=(
 ┌──────────────────────────────────────────────────────────┐
 │              MAIN LOOP (every CHECK_INTERVAL seconds)    │
 │                                                          │
-│  ┌────────────────────────────────────────────┐         │
-│  │ Test box connectivity (ping hosts)         │         │
-│  └────────────┬───────────────────────────────┘         │
+│  ┌────────────────────────────────────────────┐          │
+│  │ Test box connectivity (ping hosts)         │          │
+│  └────────────┬───────────────────────────────┘          │
 │               │                                          │
 │       ┌───────┴──────┐                                   │
 │       │ BOX OK ?     │                                   │
 │       └───┬──────┬───┘                                   │
 │           │      │                                       │
-│          YES    NO                                      │
+│          YES    NO                                       │
 │           │      │                                       │
 │           │      ▼                                       │
 │           │   fail_count++                               │
 │           │      │                                       │
-│           │   ┌──┴──────────────────┐                   │
-│           │   │ fail_count >= N ?   │                   │
-│           │   └──┬──────────────┬───┘                   │
+│           │   ┌──┴──────────────────┐                    │
+│           │   │ fail_count >= N ?   │                    │
+│           │   └──┬──────────────┬───┘                    │
 │           │      │              │                        │
-│           │     YES            NO                       │
+│           │     YES            NO                        │
 │           │      │              │                        │
-│           │      ▼              └──→ Continue           │
-│           │   ACTIVATE 4G                               │
-│           │   - Unblock 4G in iptables                  │
-│           │   - Set default route via 4G                │
-│           │   - Add MASQUERADE for selected hosts       │
-│           │   - Setup ZeroTier port forwards           │
-│           │   - Disable PBS backups                    │
-│           │   - Send Telegram notification             │
+│           │      ▼              └──→ Continue            │
+│           │   ACTIVATE 4G                                │
+│           │   - Unblock 4G in iptables                   │
+│           │   - Set default route via 4G                 │
+│           │   - Add MASQUERADE for selected hosts        │
+│           │   - Setup ZeroTier port forwards             │
+│           │   - Disable PBS backups                      │
+│           │   - Send Telegram notification               │
 │           │                                              │
 │           ▼                                              │
 │   ┌─────────────────┐                                    │
-│   │ Is current state 4G? │                                │
+│   │ Is current state 4G? │                               │
 │   └─────┬───────────┘                                    │
 │         │                                                │
 │        YES                                               │
